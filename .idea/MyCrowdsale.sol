@@ -2,7 +2,9 @@ pragma solidity ^0.4.0;
 
 contract MyCrowdsale is Crowdsale{
 
-    public uint constant MAX_COINS = 55000000;
+    private uint constant MAX_COINS = 55000000;
+
+
 
     private MyCoin coins = new MyCoin();
 
