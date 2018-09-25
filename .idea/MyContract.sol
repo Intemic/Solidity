@@ -13,7 +13,4 @@ contract MyCoin is ERC20Mintable {
 }
 
 
-contract MyICO {
-  uint public constant MAX_COIN =
 
-}
