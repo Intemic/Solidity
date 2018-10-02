@@ -744,6 +744,20 @@ contract BVACrowdsale is Crowdsale {
     IcoState private preICOState = IcoState.icoNone;
     IcoState private ICOState = IcoState.icoNone;
 
+    uint private MIN_WEI_PREICO = 3 * 1 ether;
+
+    uint private MIN_WEI_ICO = 1e17;
+
+    uint private MAX_WEI_ICO = 5 * 1 ether;
+
+    uint private MAX_BVA_PRE_ICO = 13200000;
+
+    uint private MAX_BVA_ICO = 3960000;
+
+    uint private _preICOWei;
+
+    uint private icoWei;
+
     constructor(){
       //requre(msg.sender == _owner);
       super(0, _owner, new BVATocken());
@@ -800,11 +814,34 @@ contract BVACrowdsale is Crowdsale {
     )
     internal
     {
-        //        require(beneficiary != address(0));
-        //        require(weiAmount != 0);
-        super._preValidatePurchase(beneficiary, weiAmount);
+       super._preValidatePurchase(beneficiary, weiAmount);
+       // запущено ICO
+       require(preICOState == IcoState.icoStarted || ICOState == IcoState.icoStarted);
 
-        //if ()
+       if (preICOState == IcoState.icoStarted){
+         require( weiAmount >= MIN_WEI_PREICO);
+         require( (_preICOWei + _getTokenAmount()) <= MAX_BVA_PRE_ICO );
+       }
+       else{
+         require( MIN_WEI_ICO <= weiAmount <= MAX_WEI_ICO);
+         require( icoWei < MAX_BVA_ICO );
+       }
+    }
+
+    function _updatePurchasingState(
+        address beneficiary,
+        uint256 weiAmount
+    )
+    internal
+    {
+       super._updatePurchasingState(beneficiary, weiAmount);
+
+       if (preICOState == IcoState.icoStarted){
+
+       }
+       else{
+
+       }
     }
 }
 
