@@ -734,20 +734,20 @@ contract BVACrowdsale is Crowdsale {
     enum IcoState {icoNone, icoStarted, icoFinished}
 
     // адрес кошелька владельца
-    private address _owner = 0x00a134aE23247c091Dd4A4dC1786358f26714ea3;
+    address private _owner = 0x00a134aE23247c091Dd4A4dC1786358f26714ea3;
 
-    private uint RATE_PREICO = 1500;
+    uint private RATE_PREICO = 1500;
 
-    private uint RATE_ICO = 1000;
+    uint private RATE_ICO = 1000;
 
     // статусы ICO
-    private IcoState preICOState = IcoState.icoNone;
-    private IcoState ICOState = IcoState.icoNone;
+    IcoState private preICOState = IcoState.icoNone;
+    IcoState private ICOState = IcoState.icoNone;
 
     constructor(){
       //requre(msg.sender == _owner);
       super(0, _owner, new BVATocken());
-    };
+    }
 
     modifier IsOnlyOwner(){
       require(msg.sender == _owner);
@@ -762,14 +762,17 @@ contract BVACrowdsale is Crowdsale {
 
     // запускаем PreICO
     function startPreICO() public IsOnlyOwner{
+      // если еще не запускали
       require(preICOState == IcoState.icoNone);
 
       preICOState = IcoState.icoStarted;
-      _changeRate(PREICO_RATE);
+      //устанавливаем коэффициент
+      _changeRate(RATE_PREICO);
     }
 
     // остановка PreICO
     function stopPreICO() public IsOnlyOwner{
+        // если запущено
         require(preICOState == IcoState.icoStarted);
 
        preICOState = IcoState.icoFinished;
@@ -780,7 +783,8 @@ contract BVACrowdsale is Crowdsale {
       require(ICOState == IcoState.icoNone);
 
       ICOState = IcoState.icoStarted;
-      _changeRate(PREICO_RATE);
+      //устанавливаем коэффициент
+      _changeRate(RATE_ICO);
     }
 
     // остановка ICO
@@ -790,6 +794,17 @@ contract BVACrowdsale is Crowdsale {
       ICOState = IcoState.icoFinished;
     }
 
+    function _preValidatePurchase(
+        address beneficiary,
+        uint256 weiAmount
+    )
+    {
+//        require(beneficiary != address(0));
+//        require(weiAmount != 0);
+      super(beneficiary, weiAmount);
+
+      //if ()
+    }
 }
 
 
