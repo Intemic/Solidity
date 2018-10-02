@@ -443,9 +443,8 @@ contract BVACoin is ERC20{ //ERC20Mintable {
     uint8 public constant decimals = 18;
 
     constructor(){
-        _totalSupply = MAX_COINS;
-        _balances[msg.sender] = MAX_COINS - MAX_FOUNDERS;
-        _balances[ADDR_FOUNDERS] = MAX_FOUNDERS;
+        _mint(msg.sender, MAX_COINS - MAX_FOUNDERS);
+        _mint(ADDR_FOUNDERS, MAX_FOUNDERS);
     }
 
 
