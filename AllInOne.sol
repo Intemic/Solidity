@@ -60,7 +60,8 @@ library SafeMath {
     * @dev Integer division of two numbers truncating the quotient, reverts on division by zero.
     */
     function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b > 0); // Solidity only automatically asserts when dividing by 0
+        require(b > 0);
+        // Solidity only automatically asserts when dividing by 0
         uint256 c = a / b;
         // assert(a == b * c + a % b); // There is no case in which this doesn't hold
 
@@ -107,9 +108,9 @@ library SafeMath {
 contract ERC20 is IERC20 {
     using SafeMath for uint256;
 
-    mapping (address => uint256) private _balances;
+    mapping(address => uint256) private _balances;
 
-    mapping (address => mapping (address => uint256)) private _allowed;
+    mapping(address => mapping(address => uint256)) private _allowed;
 
     uint256 private _totalSupply;
 
@@ -304,7 +305,7 @@ contract ERC20 is IERC20 {
  */
 library Roles {
     struct Role {
-        mapping (address => bool) bearer;
+        mapping(address => bool) bearer;
     }
 
     /**
@@ -386,7 +387,7 @@ contract ERC20Mintable is ERC20, MinterRole {
     /**
      * @return true if the minting is finished.
      */
-    function mintingFinished() public view returns(bool) {
+    function mintingFinished() public view returns (bool) {
         return _mintingFinished;
     }
 
@@ -424,32 +425,6 @@ contract ERC20Mintable is ERC20, MinterRole {
         return true;
     }
 }
-
-    /** здесь мой токен
-    **/
-contract BVACoin is ERC20{ //ERC20Mintable {
-
-    uint private MAX_COINS = 55000000;
-
-    uint private MAX_FOUNDERS = 37840000;
-
-    // адрес учередителей
-    address private ADDR_FOUNDERS = 0x6e69307fe1fc55B2fffF680C5080774D117f1154;
-
-    string public constant name = "Blockchain Valley";
-
-    string public constant symbol = "BVA";
-
-    uint8 public constant decimals = 18;
-
-    constructor(){
-        _mint(msg.sender, MAX_COINS - MAX_FOUNDERS);
-        _mint(ADDR_FOUNDERS, MAX_FOUNDERS);
-    }
-
-
-}
-
 
 /**
  * @title SafeERC20
@@ -560,28 +535,28 @@ contract Crowdsale {
     /**
      * @dev fallback function ***DO NOT OVERRIDE***
      */
-    function () external payable {
+    function() external payable {
         buyTokens(msg.sender);
     }
 
     /**
      * @return the token being sold.
      */
-    function token() public view returns(IERC20) {
+    function token() public view returns (IERC20) {
         return _token;
     }
 
     /**
      * @return the address where funds are collected.
      */
-    function wallet() public view returns(address) {
+    function wallet() public view returns (address) {
         return _wallet;
     }
 
     /**
      * @return the number of token units a buyer gets per wei.
      */
-    function rate() public view returns(uint256) {
+    function rate() public view returns (uint256) {
         return _rate;
     }
 
@@ -716,7 +691,146 @@ contract Crowdsale {
     function _forwardFunds() internal {
         _wallet.transfer(msg.value);
     }
+
+
+    // для сменаы rate
+    function _changeRate(uint256 newValue) internal{
+        require(newValue > 0);
+        _rate = newValue;
+    }
 }
+
+
+
+
+
+/** здесь мой токен
+**/
+contract BVATocken is ERC20 {//ERC20Mintable {
+
+    uint private MAX_COINS = 55000000;
+
+    uint private MAX_FOUNDERS = 37840000;
+
+    // адрес учередителей
+    address private ADDR_FOUNDERS = 0x6e69307fe1fc55B2fffF680C5080774D117f1154;
+
+    string public constant name = "Blockchain Valley";
+
+    string public constant symbol = "BVA";
+
+    uint8 public constant decimals = 18;
+
+    constructor(){
+        _mint(msg.sender, MAX_COINS - MAX_FOUNDERS);
+        _mint(ADDR_FOUNDERS, MAX_FOUNDERS);
+    }
+
+
+}
+
+contract BVACrowdsale is Crowdsale {
+    // статус ICO
+    enum IcoState {icoNone, icoStarted, icoFinished}
+
+    // адрес кошелька владельца
+    private address _owner = 0x00a134aE23247c091Dd4A4dC1786358f26714ea3;
+
+    private uint RATE_PREICO = 1500;
+
+    private uint RATE_ICO = 1000;
+
+    // статусы ICO
+    private IcoState preICOState = IcoState.icoNone;
+    private IcoState ICOState = IcoState.icoNone;
+
+    constructor(){
+      //requre(msg.sender == _owner);
+      super(0, _owner, new BVATocken());
+    };
+
+    modifier IsOnlyOwner(){
+      require(msg.sender == _owner);
+      _;
+    }
+
+    // проверим что preICO было остановлено
+    modifier IsPreICOFisihed(){
+      require(preICOState == IcoState.icoFinished);
+      _;
+    }
+
+    // запускаем PreICO
+    function startPreICO() public IsOnlyOwner{
+      require(preICOState == IcoState.icoNone);
+
+      preICOState = IcoState.icoStarted;
+      _changeRate(PREICO_RATE);
+    }
+
+    // остановка PreICO
+    function stopPreICO() public IsOnlyOwner{
+        require(preICOState == IcoState.icoStarted);
+
+       preICOState = IcoState.icoFinished;
+    }
+
+    // запускаем ICO
+    function startICO() public IsOnlyOwner IsPreICOFisihed{
+      require(ICOState == IcoState.icoNone);
+
+      ICOState = IcoState.icoStarted;
+      _changeRate(PREICO_RATE);
+    }
+
+    // остановка ICO
+    function stopICO() public IsOnlyOwner{
+      require(ICOState == IcoState.icoStarted);
+
+      ICOState = IcoState.icoFinished;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * @title MintedCrowdsale
@@ -725,59 +839,59 @@ contract Crowdsale {
  */
 contract MintedCrowdsale is Crowdsale {
 
-    /**
-     * @dev Overrides delivery by minting tokens upon purchase.
-     * @param beneficiary Token purchaser
-     * @param tokenAmount Number of tokens to be minted
-     */
-    function _deliverTokens(
-        address beneficiary,
-        uint256 tokenAmount
-    )
-    internal
-    {
-        // Potentially dangerous assumption about the type of the token.
-        require(
-            ERC20Mintable(address(token())).mint(beneficiary, tokenAmount));
-    }
+/**
+ * @dev Overrides delivery by minting tokens upon purchase.
+ * @param beneficiary Token purchaser
+ * @param tokenAmount Number of tokens to be minted
+ */
+function _deliverTokens(
+address beneficiary,
+uint256 tokenAmount
+)
+internal
+{
+// Potentially dangerous assumption about the type of the token.
+require(
+ERC20Mintable(address(token())).mint(beneficiary, tokenAmount));
+}
 }
 
 contract PreICO{
-   // максимальное кол-во pre
-   private uint MAX_COINS = 13200000;
+// максимальное кол-во pre
+private uint MAX_COINS = 13200000;
 
-  constructor(){
+constructor(){
 
-  }
+}
 
 }
 
 
 contract MyCrowdasale is {
-    // максимальное кол-во
-    private uint MAX_COINS = 55000000;
-    // адрес владельца
-    private adress _owner = 0x00a134aE23247c091Dd4A4dC1786358f26714ea3;
-    // для учередителей
-    private uint _founders = 37840000;
-    // адрес учередителей
-    adress _adrFounders = 0x6e69307fe1fc55B2fffF680C5080774D117f1154;
-    // максимально pre
-    private uint MAX_COINS_PRE_ICO = 13200000;
-    // максимально ico
-    private uint MAX_COIN_ICO = 3960000;
-    // preICO закончилось
+// максимальное кол-во
+private uint MAX_COINS = 55000000;
+// адрес владельца
+private adress _owner = 0x00a134aE23247c091Dd4A4dC1786358f26714ea3;
+// для учередителей
+private uint _founders = 37840000;
+// адрес учередителей
+adress _adrFounders = 0x6e69307fe1fc55B2fffF680C5080774D117f1154;
+// максимально pre
+private uint MAX_COINS_PRE_ICO = 13200000;
+// максимально ico
+private uint MAX_COIN_ICO = 3960000;
+// preICO закончилось
 
 
-    // начало PreICO
-    function startPreICO() public {
+// начало PreICO
+function startPreICO() public {
 
-    }
+}
 
-    // начало ICO
-    function startICO() public {
+// начало ICO
+function startICO() public {
 
-    }
+}
 
 
 }
