@@ -798,12 +798,13 @@ contract BVACrowdsale is Crowdsale {
         address beneficiary,
         uint256 weiAmount
     )
+    internal
     {
-//        require(beneficiary != address(0));
-//        require(weiAmount != 0);
-      super(beneficiary, weiAmount);
+        //        require(beneficiary != address(0));
+        //        require(weiAmount != 0);
+        super._preValidatePurchase(beneficiary, weiAmount);
 
-      //if ()
+        //if ()
     }
 }
 
