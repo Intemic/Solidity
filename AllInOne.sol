@@ -736,7 +736,7 @@ contract BVACrowdsale is Crowdsale {
     // адрес кошелька владельца
     address private _owner = 0x00a134aE23247c091Dd4A4dC1786358f26714ea3;
 
-    uint private RATE_PREICO = 1500;
+    uint private RATE_PREICO = 1500 * 1 ether;
 
     uint private RATE_ICO = 1000;
 
@@ -883,70 +883,5 @@ contract BVACrowdsale is Crowdsale {
 
 
 
-
-
-/**
- * @title MintedCrowdsale
- * @dev Extension of Crowdsale contract whose tokens are minted in each purchase.
- * Token ownership should be transferred to MintedCrowdsale for minting.
- */
-contract MintedCrowdsale is Crowdsale {
-
-/**
- * @dev Overrides delivery by minting tokens upon purchase.
- * @param beneficiary Token purchaser
- * @param tokenAmount Number of tokens to be minted
- */
-function _deliverTokens(
-address beneficiary,
-uint256 tokenAmount
-)
-internal
-{
-// Potentially dangerous assumption about the type of the token.
-require(
-ERC20Mintable(address(token())).mint(beneficiary, tokenAmount));
-}
-}
-
-contract PreICO{
-// максимальное кол-во pre
-private uint MAX_COINS = 13200000;
-
-constructor(){
-
-}
-
-}
-
-
-contract MyCrowdasale is {
-// максимальное кол-во
-private uint MAX_COINS = 55000000;
-// адрес владельца
-private adress _owner = 0x00a134aE23247c091Dd4A4dC1786358f26714ea3;
-// для учередителей
-private uint _founders = 37840000;
-// адрес учередителей
-adress _adrFounders = 0x6e69307fe1fc55B2fffF680C5080774D117f1154;
-// максимально pre
-private uint MAX_COINS_PRE_ICO = 13200000;
-// максимально ico
-private uint MAX_COIN_ICO = 3960000;
-// preICO закончилось
-
-
-// начало PreICO
-function startPreICO() public {
-
-}
-
-// начало ICO
-function startICO() public {
-
-}
-
-
-}
 
 
