@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.25;
 
 /**
  * @title ERC20 interface
@@ -754,9 +754,9 @@ contract BVACrowdsale is Crowdsale {
 
     uint private MAX_BVA_ICO = 3960000;
 
-    uint private _preICOBVA;
+    uint private _preICOWei;
 
-    uint private _icoBVA;
+    uint private icoWei;
 
     constructor(){
       //requre(msg.sender == _owner);
@@ -824,6 +824,8 @@ contract BVACrowdsale is Crowdsale {
        uint amount;
 
        super._preValidatePurchase(beneficiary, weiAmount);
+       // запущено ICO
+       require(preICOState == IcoState.icoStarted || ICOState == IcoState.icoStarted);
 
        if (preICOState == IcoState.icoStarted){
          require( weiAmount >= MIN_WEI_PREICO);
