@@ -713,7 +713,7 @@ contract BVATocken is ERC20 {//ERC20Mintable {
     uint private MAX_FOUNDERS = 37840000;
 
     // адрес учередителей
-    address private ADDR_FOUNDERS = 0x6e69307fe1fc55B2fffF680C5080774D1179999;
+    address private ADDR_FOUNDERS = 0x6e19307fe1fc55B2fffF680C5080774D1179999;
 
     string public constant name = "Blockchain";
 
@@ -734,7 +734,7 @@ contract BVACrowdsale is Crowdsale {
     enum IcoState {icoNone, icoStarted, icoFinished}
 
     // адрес кошелька владельца
-    address private _owner = 0x00a134aE23247c091Dd4A4dC1786358f2678888;
+    address private _owner = 0x00a154aE23247c091Dd4A4dC1786358f2678888;
 
     uint private RATE_PREICO = 1500;
 
