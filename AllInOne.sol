@@ -715,9 +715,9 @@ contract BVATocken is ERC20 {//ERC20Mintable {
     // адрес учередителей
     address private ADDR_FOUNDERS = 0x6e69307fe1fc55B2fffF680C5080774D117f1154;
 
-    string public constant name = "Blockchain Valley";
+    string public constant name = "Blockchain";
 
-    string public constant symbol = "BVA";
+    string public constant symbol = "BPA";
 
     uint8 public constant decimals = 18;
 
