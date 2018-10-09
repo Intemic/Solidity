@@ -724,6 +724,8 @@ contract BPATocken is ERC20 {//ERC20Mintable {
     constructor(){
         _mint(msg.sender, MAX_COINS - MAX_FOUNDERS);
         _mint(ADDR_FOUNDERS, MAX_FOUNDERS);
+        // все выпустили
+        finishMinting();
     }
 
 
@@ -758,9 +760,8 @@ contract BPACrowdsale is Crowdsale {
 
     uint private icoWei;
 
-    constructor() Crowdsale(0, _owner, bpa){
-    //requre(msg.sender == _owner);
-      super(0, _owner, new BPATocken());
+    constructor() Crowdsale(1, _owner, new BPATocken()){
+
     }
 
     modifier IsOnlyOwner(){
