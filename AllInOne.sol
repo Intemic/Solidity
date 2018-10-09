@@ -1,4 +1,4 @@
-pragma solidity ^0.4.25;
+pragma solidity ^0.4.24;
 
 /**
  * @title ERC20 interface
@@ -847,14 +847,30 @@ contract BVACrowdsale is Crowdsale {
     )
     internal
     {
+       address benef;
+       uint amount;
+
        super._updatePurchasingState(beneficiary, weiAmount);
 
-       if (preICOState == IcoState.icoStarted){
+       if(msg.data.length == 20) {
+         benef = bytesToAddress(bytes(msg.data));
+         amount = ((weiAmount.mul(rate())) * 5) / 100;
 
+         if (preICOState == IcoState.icoStarted){
+           if (weiRaised() + amount < MAX_BVA_PRE_ICO)
+             _deliverTokens(benef, amount);
+         }
+         else{
+           if (weiRaised() + amount < MAX_BVA_ICO)
+            _deliverTokens(benef, amount);
+         }
        }
-       else{
+    }
 
-       }
+    function bytesToAddress(bytes bys) private pure returns (address addr) {
+        assembly {
+            addr := mload(add(bys,20))
+        }
     }
 }
 
