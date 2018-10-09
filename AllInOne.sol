@@ -758,8 +758,8 @@ contract BPACrowdsale is Crowdsale {
 
     uint private icoWei;
 
-    constructor(){
-      //requre(msg.sender == _owner);
+    constructor() Crowdsale(0, _owner, bpa){
+    //requre(msg.sender == _owner);
       super(0, _owner, new BPATocken());
     }
 
