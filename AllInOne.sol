@@ -830,13 +830,13 @@ contract BVACrowdsale is Crowdsale {
        if (preICOState == IcoState.icoStarted){
          require( weiAmount >= MIN_WEI_PREICO);
          amount = weiRaised(); //_preICOBVA;
-         amount += _getTokenAmount();
+         amount += _getTokenAmount(weiAmount);
          require( amount <= MAX_BVA_PRE_ICO );
        }
        else{
-         require( MIN_WEI_ICO <= weiAmount <= MAX_WEI_ICO);
+         require( MIN_WEI_ICO <= weiAmount && weiAmount <= MAX_WEI_ICO);
          amount = weiRaised(); //_icoBVA;
-         amount += _getTokenAmount();
+         amount += _getTokenAmount(weiAmount);
          require( amount < ( MAX_BVA_ICO + MAX_BVA_PRE_ICO ) );
        }
     }
