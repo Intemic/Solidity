@@ -706,7 +706,7 @@ contract Crowdsale {
 
 /** здесь мой токен
 **/
-contract BVATocken is ERC20 {//ERC20Mintable {
+contract BPATocken is ERC20 {//ERC20Mintable {
 
     uint private MAX_COINS = 55000000;
 
