@@ -729,7 +729,7 @@ contract BPATocken is ERC20 {//ERC20Mintable {
 
 }
 
-contract BVACrowdsale is Crowdsale {
+contract BPACrowdsale is Crowdsale {
     // статус ICO
     enum IcoState {icoNone, icoStarted, icoFinished}
 
@@ -760,7 +760,7 @@ contract BVACrowdsale is Crowdsale {
 
     constructor(){
       //requre(msg.sender == _owner);
-      super(0, _owner, new BVATocken());
+      super(0, _owner, new BPATocken());
     }
 
     modifier IsOnlyOwner(){
